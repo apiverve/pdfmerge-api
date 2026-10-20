@@ -1,0 +1,106 @@
+openapi: 3.0.4
+info:
+  title: PDF Merge
+  description: >-
+    PDF Merge combines 2 to 10 PDFs into one file, keeping their order, and
+    returns a download link valid for 2 days. Upload the files or send their
+    URLs. Paid plans add a breakdown of where each source document starts and
+    ends in the merged file.
+  termsOfService: https://apiverve.com/terms/
+  contact:
+    name: APIVerve Support
+    email: hello@apiverve.com
+    url: https://apiverve.com/contact
+  version: 1.0.0
+externalDocs:
+  description: Learn more about APIVerve
+  url: https://docs.apiverve.com?utm_source=openapi
+servers:
+  - url: https://api.apiverve.com/
+paths:
+  /v1/pdfmerge:
+    post:
+      summary: PDF Merge
+      description: >-
+        Merge 2 to 10 PDFs, uploaded as multipart files or sent as URLs, into
+        one PDF
+      operationId: pdfmerge
+      parameters:
+        - name: urls
+          in: query
+          schema:
+            type: string
+          required: false
+          description: >-
+            A JSON array of 2 to 10 public PDF URLs, merged in order. Or upload
+            the PDFs as multipart files instead
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: status
+                  error:
+                    type: string
+                    description: error
+                  data:
+                    type: object
+                    description: data
+              example:
+                status: ok
+                error: null
+                data:
+                  pdfName: a356acc9-c44f-4363-9cda-14ed160d5f5d.pdf
+                  fileCount: 2
+                  pageCount: 5
+                  size: 13539
+                  expires: 1792230036453
+                  downloadURL: https://storage.googleapis.com/apiverve/APIData/pdfmerge/a356acc9-c44f-4363-9cda-14ed160d5f5d.pdf?GoogleAccessId=635500398038-compute%40developer.gserviceaccount.com&Expires=1792230036&Signature=R5%2B9%2FIKgsCiWQ7ibAS4Z%2B%2FLpYbNYc7hbAQGI%2FUtvmietXWHJxZK9x4%2FYYdLR6OXAVfvasiSNV2S8iie1Hz7xBGlTJMN8db%2BJ2tkE7GTnOXItMqMU8nuB0z6eddkoQmBESG8EOBr3AEG4x7XaEmP47FqUFsWoikKL2yhwZ9VHL%2F5ANZbvYnfbY1WBjVVOY4wQE1T6CDHM6En2Ov%2FzbTUENH7dasoIaJKWCXa7b1hBhc5MLOMB0MUQWRjb3cVoTHkZ1IRKh3InOdUduyORXOJpwLBTfLu6Q7%2FMEASTXd2j1N9F3OSJ7LYpOfiVhSvA%2FIW6CT2srzKniP5KgeX%2BYKTnNQ%3D%3D
+                  sources:
+                    - index: 1
+                      name: rotation.pdf
+                      pageCount: 2
+                      startPage: 1
+                      endPage: 2
+                    - index: 2
+                      name: sizes.pdf
+                      pageCount: 3
+                      startPage: 3
+                      endPage: 5
+        '401':
+          description: Your request was not authorized, or your API Key was invalid
+        '404':
+          description: Requested resource was not found
+        '500':
+          description: A server error has occurred, try again later
+      requestBody:
+        required: false
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                pdfs:
+                  type: string
+                  format: binary
+                  description: 'File to upload (accepted: .pdf, max 25MB)'
+                  x-acceptedTypes:
+                    - .pdf
+                  x-maxSizeMB: 25
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+security:
+  - api_key: []
+sampleRequest:
+  urls:
+    - https://raw.githubusercontent.com/mozilla/pdf.js/master/test/pdfs/rotation.pdf
+    - https://raw.githubusercontent.com/mozilla/pdf.js/master/test/pdfs/sizes.pdf
