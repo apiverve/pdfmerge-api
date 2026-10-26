@@ -1,6 +1,6 @@
 {
   "name": "@apiverve/pdfmerge",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "PDF Merge combines 2 to 10 PDFs into one file, keeping their order, and returns a download link valid for 2 days. Upload the files or send their URLs. Paid plans add a breakdown of where each source document starts and ends in the merged file.",
   "main": "index.js",
   "types": "index.d.ts",
